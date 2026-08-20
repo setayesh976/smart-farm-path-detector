@@ -17,7 +17,8 @@ AI model. It was chosen because it's simple to explain and mirrors how
 real agricultural spraying robots plan their coverage path.
 
 For each step, the program prints the movement command the robot would
-follow: Forward, Left, or Right.
+follow: Forward, Left, or Right. It also estimates the total distance
+traveled, assuming a fixed spacing between grid cells.
 """
 
 # Farm grid: each row of the list is one row of the field.
@@ -32,6 +33,10 @@ FARM_GRID = [
 
 ROWS = len(FARM_GRID)
 COLS = len(FARM_GRID[0])
+
+# Assumed real-world spacing between adjacent grid cells, in meters.
+# Used only to turn "number of steps" into a rough distance estimate.
+CELL_SPACING_METERS = 1.5
 
 
 def print_farm():
@@ -107,12 +112,27 @@ def print_path_commands(commands):
         print(f"  Step {i:>2}: {cmd}")
 
 
+# ─────────────────────────────────────────────────────────────
+# NEW: DISTANCE ESTIMATION
+# ─────────────────────────────────────────────────────────────
+
+def estimate_distance(path):
+    """
+    Estimates the total distance traveled by counting grid moves and
+    multiplying by the assumed spacing between cells. Every move (whether
+    the robot goes Forward, Left, or Right) covers one cell of distance,
+    so this is simply (number of steps) x (spacing per cell).
+    """
+    total_steps = len(path) - 1
+    return total_steps * CELL_SPACING_METERS
 def print_path_summary(path):
     total_steps = len(path) - 1
     lanes_covered = len(get_path_columns())
+    distance = estimate_distance(path)
     print("\n=== Coverage Summary ===")
     print(f"  Lanes covered: {lanes_covered}")
     print(f"  Total movement steps: {total_steps}")
+    print(f"  Estimated distance traveled: {distance:.1f} meters")
     print(f"  Start position: {path[0]}")
     print(f"  End position:   {path[-1]}")
 
@@ -137,3 +157,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
