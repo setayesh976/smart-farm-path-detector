@@ -1,4 +1,4 @@
-# Smart Farm Path Detector
+# Farm Path Detector
 
 A Python simulation of path planning for an autonomous spraying robot moving between crop rows on a farm.
 
@@ -22,19 +22,14 @@ This is not a machine learning model — it's a classic, well-known pathfinding 
 3. Turn to the next lane, walk back up
 4. Repeat until every lane is covered
 
-
-predicted_distance = number_of_steps × cell_spacing
-
+estimated_distance = number_of_steps × cell_spacing
 
 I chose this approach because it's simple, explainable, and mirrors how real spraying robots plan coverage — without needing any training data or computer vision.
 
 ## How To Run
 
-
 python farm_path_detector.py
-
 
 ## Notes
 
-This is an early prototype focused on the path-planning logic itself, using a simplified grid instead of real camera input. Obstacle/human detection and real sensor input are possible future extensions, not part of this version.
-
+This is an early prototype focused on the path-planning logic itself, using a simplified, perfectly uniform grid instead of a real camera image. A real field isn't this uniform — rows curve, have gaps, and vary in spacing — so detecting the actual row layout from a photo (and detecting obstacles or people in real time) would need computer vision techniques I haven't learned yet. Those are possible future extensions, not part of this version.
